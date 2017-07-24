@@ -12,21 +12,22 @@ class ReviewModel():
         pass
 
     def get_data(self):
-        column_names = ["msg"]
-        #with open('txt_sentoken/neg/cv000_29416.txt', 'r') as content_file:
-        #     df = content_file.read().replace("\n","")
-        #    df = pd.read_csv(content_file, names=column_names)
-        #    print (df)
-        i=0
+        # Read all positive and negative reviews into a single DataFrame
         list=[]
+        column_names = ["review","score"]
         for filename in glob.glob("txt_sentoken/neg/*.txt"):
-            frame = pd.read_csv(filename, names=column_names)
-            list.append(frame)
-        df = pd.concat(list)
-        print (df)
+            with open(filename, 'r') as content_file:
+                tuple = (content_file.read().replace("\n",""), False)
+                list.append(tuple)
 
+        for filename in glob.glob("txt_sentoken/pos/*.txt"):
+            with open(filename, 'r') as content_file:
+                tuple = (content_file.read().replace("\n",""), True)
+                list.append(tuple)
 
-        return True
+        df = pd.DataFrame(list, columns=column_names)
+
+        return df
 
     def parse_and_split_data(self, df):
         pass
